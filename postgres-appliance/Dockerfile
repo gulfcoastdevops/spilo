@@ -105,7 +105,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
         && rm -f *.deb \
         && apt-get install -y $BUILD_PACKAGES; \
     else \
-        BUILD_PACKAGES="$BUILD_PACKAGES pgxnclient zlib1g-dev libprotobuf-c-dev libpam0g-dev libcurl4-openssl-dev libicu-dev python libc-ares-dev pandoc pkg-config" \
+        BUILD_PACKAGES="$BUILD_PACKAGES libsystemd-dev pgxnclient zlib1g-dev libprotobuf-c-dev libpam0g-dev libcurl4-openssl-dev libicu-dev python libc-ares-dev pandoc pkg-config" \
 # debezium-decoderbufs: libprotobuf-c-dev
 # pgbouncer: libc-ares-dev pandoc pkg-config
         && apt-get install -y $BUILD_PACKAGES libprotobuf-c1 libcurl4 \
@@ -429,7 +429,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN set -ex \
     && if [ "$COMPRESS" = "true" ]; then \
         apt-get update \
-        && apt-get install -y busybox xz-utils \
+        && apt-get install -y busybox xz-utils pgbackrest \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /var/cache/debconf/* /usr/share/doc /usr/share/man /etc/rc?.d /etc/systemd \
         && ln -snf busybox /bin/sh \

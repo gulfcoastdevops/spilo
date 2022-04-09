@@ -1,0 +1,39 @@
+name: container_build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage: ['dev', 'prod']
+      fail-fast: true
+      max-parallel: 1
+    environment:
+      name: ${{ matrix.stage }}
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v2
+    - uses: aws-actions/configure-aws-credentials@master
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github
+    - run: aws sts get-caller-identity
+    - id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - id: sha
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ github.event.repository.name }}
+        IMAGE_TAG: ${{ steps.sha.outputs.sha_short }}
+      run: |
+        cd postgres-appliance/
+        docker build --build-arg PGVERSION="13" --build-arg TIMESCALEDB="2.2.1" --build-arg TIMESCALEDB_APACHE_ONLY=false -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
