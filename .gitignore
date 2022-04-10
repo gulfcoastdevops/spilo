@@ -1,0 +1,6 @@
+.DS_Store
+# ide
+.idea
+
+# environmental variables
+.env

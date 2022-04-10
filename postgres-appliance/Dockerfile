@@ -466,7 +466,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN set -ex \
     && if [ "$COMPRESS" = "true" ]; then \
         apt-get update \
-        && apt-get install -y busybox xz-utils \
+        && apt-get install -y busybox xz-utils pgbackrest \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /var/cache/debconf/* /usr/share/doc /usr/share/man /etc/rc?.d /etc/systemd \
         && ln -snf busybox /bin/sh \
