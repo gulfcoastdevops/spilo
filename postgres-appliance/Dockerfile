@@ -232,6 +232,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
                     postgresql-${version}-cron postgresql-${version}-pgq3 \
                     postgresql-${version}-pg-stat-kcache $EXTRAS \
 \
+            # Install pgbackrest
+            && apt-get install -y pgbackrest \
+\
             # Install 3rd party stuff
             && cd timescaledb \
             && for v in $TIMESCALEDB; do \
@@ -466,7 +469,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN set -ex \
     && if [ "$COMPRESS" = "true" ]; then \
         apt-get update \
-        && apt-get install -y busybox xz-utils pgbackrest \
+        && apt-get install -y busybox xz-utils \
         && apt-get clean \
         && rm -rf /var/lib/apt/lists/* /var/cache/debconf/* /usr/share/doc /usr/share/man /etc/rc?.d /etc/systemd \
         && ln -snf busybox /bin/sh \
