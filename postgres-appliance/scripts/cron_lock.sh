@@ -17,7 +17,7 @@ refresh_view() {
 
   # Check if lock file exists
   if [ -f "$lock_file" ]; then
-    logger -t cron_lock.sh "Previous job for $database $view_name is still running. Exiting..."
+    logger -t cron_lock.sh "Previous job for $database_name $view_name is still running. Exiting..."
     exit 1
   fi
 
@@ -44,7 +44,7 @@ run_procedure() {
 
   # Check if lock file exists
   if [ -f "$lock_file" ]; then
-    logger -t cron_lock.sh "Previous job for $database $func_name is still running. Exiting..."
+    logger -t cron_lock.sh "Previous job for $database_name $func_name is still running. Exiting..."
     exit 1
   fi
 
