@@ -1,9 +1,9 @@
 #!/bin/bash
 
-local operation="$1"
-local database_name="$2"
-local func_name="$3"
-local extra_args="$4"
+operation="$1"
+database_name="$2"
+func_name="$3"
+extra_args="$4"
 
 # Paths to lock files
 LOCK_FILE="/tmp/${operation}_${database_name}_${func_name}.lock"
